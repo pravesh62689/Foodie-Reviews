@@ -1,61 +1,107 @@
-const Restaurant = require('../models/Restaurant');
+const Restaurant = require('../models/restaurant');
 
-const getRestaurants = async (req, res) => {
+// Create a new restaurant
+const createRestaurant = async (req, res) => {
     try {
-        const restaurants = await Restaurant.find();
-        res.json(restaurants);
-    } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error });
-    }
-};
+        const { name, location, cuisine, image } = req.body;
 
-const addRestaurant = async (req, res) => {
-    const { name, location, cuisine } = req.body;
+        // Create a new restaurant object
+        const newRestaurant = new Restaurant({
+            name,
+            location,
+            cuisine,
+            image
+        });
 
-    try {
-        const newRestaurant = new Restaurant({ name, location, cuisine });
+        // Save the restaurant to the database
         await newRestaurant.save();
+
+        // Send the newly created restaurant as the response
         res.status(201).json(newRestaurant);
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error });
+        // Handle errors
+        res.status(500).json({ error: 'Failed to create restaurant' });
     }
 };
 
-const searchRestaurants = async (req, res) => {
-    const { query } = req.query;
-
+// Get a list of all restaurants
+const getRestaurants = async (req, res) => {
     try {
-        const restaurants = await Restaurant.find({ $text: { $search: query } });
+        // Retrieve all restaurants from the database
+        const restaurants = await Restaurant.find();
+
+        // Send the list of restaurants as the response
         res.json(restaurants);
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error });
+        // Handle errors
+        res.status(500).json({ error: 'Failed to retrieve restaurants' });
     }
 };
 
-const filterRestaurants = async (req, res) => {
-    const { cuisine, location } = req.query;
-
+// Get a specific restaurant by its ID
+const getRestaurantById = async (req, res) => {
     try {
-        let filter = {};
+        // Retrieve the restaurant with the specified ID
+        const restaurant = await Restaurant.findById(req.params.id);
 
-        if (cuisine) {
-            filter.cuisine = cuisine;
+        if (!restaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
         }
 
-        if (location) {
-            filter.location = location;
-        }
-
-        const restaurants = await Restaurant.find(filter);
-        res.json(restaurants);
+        // Send the restaurant as the response
+        res.json(restaurant);
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error });
+        // Handle errors
+        res.status(500).json({ error: 'Failed to retrieve restaurant' });
+    }
+};
+
+// Update a specific restaurant by its ID
+const updateRestaurant = async (req, res) => {
+    try {
+        const { name, location, cuisine, image } = req.body;
+
+        // Find the restaurant by its ID and update it
+        const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+            req.params.id,
+            { name, location, cuisine, image },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedRestaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+
+        // Send the updated restaurant as the response
+        res.json(updatedRestaurant);
+    } catch (error) {
+        // Handle errors
+        res.status(500).json({ error: 'Failed to update restaurant' });
+    }
+};
+
+// Delete a specific restaurant by its ID
+const deleteRestaurant = async (req, res) => {
+    try {
+        // Find the restaurant by its ID and delete it
+        const deletedRestaurant = await Restaurant.findByIdAndDelete(req.params.id);
+
+        if (!deletedRestaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+
+        // Send a success message as the response
+        res.json({ message: 'Restaurant deleted successfully' });
+    } catch (error) {
+        // Handle errors
+        res.status(500).json({ error: 'Failed to delete restaurant' });
     }
 };
 
 module.exports = {
+    createRestaurant,
     getRestaurants,
-    addRestaurant,
-    searchRestaurants,
-    filterRestaurants,
+    getRestaurantById,
+    updateRestaurant,
+    deleteRestaurant,
 };

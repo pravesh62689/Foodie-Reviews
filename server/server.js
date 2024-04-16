@@ -1,34 +1,34 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const app = require('./app');
 const dotenv = require('dotenv');
-
 dotenv.config();
+require('./config');
 
-const app = express();
-
-// Middleware
-app.use(bodyParser.json());
-app.use(cors());
-
-// Connect to the database
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Database connected'))
-    .catch(err => console.error('Database connection error:', err));
-
-// Importing routes
-const authRoutes = require('./routes/authRoutes');
-const restaurantRoutes = require('./routes/restaurantRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-
-// Using routes
-app.use('/auth', authRoutes);
-app.use('/restaurants', restaurantRoutes);
-app.use('/reviews', reviewRoutes);
-
-// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+
+// Handle server start errors
+const startServer = () => {
+    try {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error(`Failed to start the server: ${error.message}`);
+        process.exit(1); // Exit with an error code
+    }
+};
+
+// Handle graceful shutdown
+const gracefulShutdown = () => {
+    console.log('Shutting down the server...');
+    app.close(() => {
+        console.log('Server shut down gracefully.');
+        process.exit(0); // Exit cleanly
+    });
+};
+
+// Listen for process termination signals and handle shutdown
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+// Start the server
+startServer();
