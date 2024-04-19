@@ -1,21 +1,30 @@
-
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Notification from './components/Notification';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Reviews from './pages/Reviews';
+import UserProfile from './pages/UserProfile';
+import RestaurantList from './pages/RestaurantList';
+import RestaurantReviews from './pages/RestaurantReviews';
+import AdminPanel from './pages/AdminPanel';
 
-const App = () => {
+function App() {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/reviews" component={Reviews} />
-      </Switch>
-    </Router>
+    <div>
+      <Navbar />
+      <Notification />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/restaurants" element={<RestaurantList />} />
+        <Route path="/restaurants/:id/reviews" element={<RestaurantReviews />} />
+        <Route path="/admin" element={<AdminPanel />} />
+      </Routes>
+    </div>
   );
-};
+}
 
 export default App;

@@ -1,0 +1,83 @@
+.navbar {
+  background-color: #2c3e50; /* Dark blue background */
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.navbar-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  margin-right: 20px; /* Increased margin between buttons */
+  transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  padding: 10px 20px;
+}
+
+.navbar-button:hover {
+  background-color: transparent;
+  transform: scale(1.05);
+}
+
+.navbar-button.active {
+  color: #ff9285;
+  border-bottom: 3px solid #ff9285;
+  transition: border-bottom 2s, color 2s;
+}
+
+
+
+.logout-button {
+  transition: transform 0.2s, color 0.2s;
+}
+
+.logout-button:hover {
+  color: #e74c3c;
+  transform: rotate(20deg);
+}
+
+.profile-button {
+  margin-left: 10px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.user-avatar:hover {
+  border: 2px solid #ecf0f1;
+}
+
+.popdown-menu {
+  margin-top: 10px;
+  background-color: #34495e; /* Dark blue color */
+}
+
+.popdown-menu .MuiList-root {
+  width: 300px;
+  padding: 0;
+}
+
+.popdown-menu .MuiListItem-root {
+  color: rgba(0, 0, 0, 0.8);
+  padding: 8px 16px;
+}
+
+.popdown-menu .MuiListItem-root:not(:first-child):hover {
+  background-color: #1abc9c; /* Change background color on hover */
+  color: azure;
+}
+

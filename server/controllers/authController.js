@@ -5,12 +5,22 @@ const { jwtSecret, tokenExpiration } = require('../config/config');
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { username, email, password } = req.body;
 
-        // Check if the email is already registered
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        // Validate user input
+        if (!username || !email || !password) {
+            return res.status(400).json({ message: 'Username, email, and password are required' });
+        }
+
+        // Check if the email or username is already registered
+        const existingUserByEmail = await User.findOne({ email });
+        if (existingUserByEmail) {
             return res.status(400).json({ message: 'Email is already registered' });
+        }
+
+        const existingUserByUsername = await User.findOne({ username });
+        if (existingUserByUsername) {
+            return res.status(400).json({ message: 'Username is already registered' });
         }
 
         // Hash the password
@@ -18,7 +28,7 @@ const registerUser = async (req, res) => {
 
         // Create a new user
         const newUser = new User({
-            name,
+            username,
             email,
             password: hashedPassword,
         });
@@ -26,12 +36,22 @@ const registerUser = async (req, res) => {
         // Save the user
         await newUser.save();
 
+        // Send successful registration response
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error('Error during registration:', error);
+
+        // Check for validation errors
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: `Validation error: ${error.message}` });
+        }
+
+        // Handle other errors with a 500 status code
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+
 
 const loginUser = async (req, res) => {
     try {

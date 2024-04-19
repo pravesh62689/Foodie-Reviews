@@ -3,9 +3,9 @@ const router = express.Router();
 
 // Import controllers
 const AuthController = require('../controllers/AuthController');
-const RestaurantController = require('../controllers/restaurantController');
+const RestaurantController = require('../controllers/RestaurantController');
 const DishController = require('../controllers/DishController');
-const ReviewController = require('../controllers/reviewController');
+const ReviewController = require('../controllers/ReviewController');
 const NotificationController = require('../controllers/NotificationController');
 
 // Import middlewares
@@ -14,50 +14,36 @@ const adminMiddleware = require('../middlewares/adminMiddleware');
 const uploadMiddleware = require('../middlewares/uploadMiddleware');
 
 // Define routes
+
 // Authentication routes
-router.route('/auth/register')
-    .post(AuthController.registerUser);
-
-router.route('/auth/login')
-    .post(AuthController.loginUser);
-
-router.route('/auth/profile')
-    .get(authMiddleware, AuthController.getUserProfile);
+router.post('/auth/register', AuthController.registerUser);
+router.post('/auth/login', AuthController.loginUser);
+router.get('/auth/profile', authMiddleware, AuthController.getUserProfile);
 
 // Restaurant routes
-router.route('/restaurant')
-    .post(authMiddleware, adminMiddleware, RestaurantController.createRestaurant)
-    .get(RestaurantController.getRestaurants);
-
-router.route('/restaurant/:id')
-    .get(RestaurantController.getRestaurantById)
-    .put(authMiddleware, adminMiddleware, RestaurantController.updateRestaurant)
-    .delete(authMiddleware, adminMiddleware, RestaurantController.deleteRestaurant);
+router.post('/restaurants', authMiddleware, adminMiddleware, RestaurantController.createRestaurant);
+router.get('/restaurants', RestaurantController.getRestaurants);
+router.get('/restaurants/:id', RestaurantController.getRestaurantById);
+router.put('/restaurants/:id', authMiddleware, adminMiddleware, RestaurantController.updateRestaurant);
+router.delete('/restaurants/:id', authMiddleware, adminMiddleware, RestaurantController.deleteRestaurant);
 
 // Dish routes
-router.route('/dish')
-    .post(authMiddleware, adminMiddleware, DishController.createDish)
-    .get(DishController.getDishes);
-
-router.route('/dish/:id')
-    .get(DishController.getDishById)
-    .put(authMiddleware, adminMiddleware, DishController.updateDish)
-    .delete(authMiddleware, adminMiddleware, DishController.deleteDish);
+router.post('/dishes', authMiddleware, adminMiddleware, DishController.createDish);
+router.get('/dishes', DishController.getDishes);
+router.get('/dishes/:id', DishController.getDishById);
+router.put('/dishes/:id', authMiddleware, adminMiddleware, DishController.updateDish);
+router.delete('/dishes/:id', authMiddleware, adminMiddleware, DishController.deleteDish);
 
 // Review routes
-router.route('/review')
-    .post(authMiddleware, ReviewController.createReview)
-    .get(ReviewController.getReviews);
-
-router.route('/review/:id')
-    .get(ReviewController.getReviewById)
-    .put(authMiddleware, ReviewController.updateReview)
-    .delete(authMiddleware, ReviewController.deleteReview);
+router.post('/reviews', authMiddleware, ReviewController.createReview);
+router.get('/reviews', ReviewController.getReviews);
+router.get('/reviews/:id', ReviewController.getReviewById);
+router.put('/reviews/:id', authMiddleware, ReviewController.updateReview);
+router.delete('/reviews/:id', authMiddleware, ReviewController.deleteReview);
 
 // Notification routes
-router.route('/notification')
-    .get(authMiddleware, NotificationController.getNotifications)
-    .post(authMiddleware, NotificationController.createNotification);
+router.get('/notifications', authMiddleware, NotificationController.getNotifications);
+router.post('/notifications', authMiddleware, NotificationController.createNotification);
 
 // Export the router
 module.exports = router;

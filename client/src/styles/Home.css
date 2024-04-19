@@ -1,22 +1,114 @@
+/* Home.css */
+
+/* Container styles */
 .home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  
-  .button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-  @media (max-width: 768px) {
-    .home-container {
-      padding: 20px;
-    }
-  }
-  
+  padding: 40px;
+}
+
+/* Font styles */
+.hero-section,
+.section,
+.review-card,
+.testimonial-card {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Hero Section */
+.hero-section {
+  padding: 60px;
+  text-align: center;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 50px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.hero-subtitle {
+  margin-top: 10px;
+  font-size: 1.6rem;
+}
+
+.hero-cta {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+/* Section styles */
+.section {
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+/* Card styles */
+.restaurant-card,
+.chef-card,
+.review-card,
+.testimonial-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.restaurant-card:hover,
+.chef-card:hover,
+.review-card:hover,
+.testimonial-card:hover {
+  transform: scale(1.05);
+}
+
+/* Review and Testimonial cards */
+.review-card,
+.testimonial-card {
+  background: #f5f5f5;
+  padding: 20px;
+}
+
+.review-text,
+.testimonial-text {
+  font-style: italic;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.review-author,
+.testimonial-author {
+  text-align: right;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Call-to-Action Section */
+.cta-section {
+  text-align: center;
+}
+
+.cta-section button {
+  font-size: 1.2rem;
+}
